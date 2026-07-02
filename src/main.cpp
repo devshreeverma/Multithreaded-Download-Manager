@@ -26,6 +26,19 @@ int main()
                 << (client.supportsRangeRequests() ? "YES" : "NO")
                 << '\n';
     }
+    std::string filename;
+
+    std::cout << "\nOutput file: ";
+    std::cin >> filename;
+
+    if(client.downloadFile(url, filename))
+    {
+        std::cout << "Download completed successfully!\n";
+    }
+    else
+    {
+        std::cout << "Download failed!\n";
+    }
 
 
 

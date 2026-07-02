@@ -133,3 +133,70 @@ bool HTTPClient::supportsRangeRequests() const
 {
     return supportsRange;
 }
+size_t HTTPClient::writeCallback(
+    void* ptr,
+    size_t size,
+    size_t nmemb,
+    void* userdata)
+{
+    HTTPClient* client =
+        static_cast<HTTPClient*>(userdata);
+
+    size_t totalBytes = size * nmemb;
+
+    client->outputStream.write(
+        static_cast<char*>(ptr),
+        totalBytes);
+
+    return totalBytes;
+}
+bool HTTPClient::downloadFile(
+    const std::string& url,
+    const std::string& outputFile)
+{
+    CURL* curl = curl_easy_init();
+
+    if (!curl)
+    {
+        return false;
+    }
+
+    outputStream.open(
+        outputFile,
+        std::ios::binary);
+
+    if (!outputStream)
+    {
+        curl_easy_cleanup(curl);
+        return false;
+    }
+
+    curl_easy_setopt(
+        curl,
+        CURLOPT_URL,
+        url.c_str());
+
+    curl_easy_setopt(
+        curl,
+        CURLOPT_WRITEFUNCTION,
+        writeCallback);
+
+    curl_easy_setopt(
+        curl,
+        CURLOPT_WRITEDATA,
+        this);
+
+    curl_easy_setopt(
+        curl,
+        CURLOPT_FOLLOWLOCATION,
+        1L);
+
+    CURLcode result =
+        curl_easy_perform(curl);
+
+    outputStream.close();
+
+    curl_easy_cleanup(curl);
+
+    return result == CURLE_OK;
+}
