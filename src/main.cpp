@@ -1,9 +1,33 @@
 #include <iostream>
+#include "HTTPClient.h"
 
 int main()
 {
-    std::cout << "Multithreaded Download Manager\n";
-    std::cout << "Version 0.1\n";
+    HTTPClient client;
+
+    std::string url;
+
+    std::cout << "Enter URL: ";
+    std::cin >> url;
+
+    if(client.fetchHeaders(url))
+    {
+        std::cout << "Status Code: "
+                  << client.getStatusCode()
+                  << std::endl;
+
+        std::cout << "Content Length: "
+                  << client.getContentLength()
+                  << std::endl;
+        std::cout << "Content Type: "
+            << client.getContentType() << '\n';
+
+        std::cout << "Supports Range Requests: "
+                << (client.supportsRangeRequests() ? "YES" : "NO")
+                << '\n';
+    }
+
+
 
     return 0;
 }
