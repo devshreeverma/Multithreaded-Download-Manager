@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/download_manager.dir/link.d CMakeFiles/download_manager.dir/src/main.cpp.o -o download_manager

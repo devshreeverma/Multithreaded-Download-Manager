@@ -1,0 +1,3 @@
+/home/devshree/Projects/Multithreaded-Download-Manager/build/CMakeFiles/download_manager.dir
+/home/devshree/Projects/Multithreaded-Download-Manager/build/CMakeFiles/edit_cache.dir
+/home/devshree/Projects/Multithreaded-Download-Manager/build/CMakeFiles/rebuild_cache.dir
