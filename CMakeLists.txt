@@ -11,6 +11,7 @@ find_package(CURL REQUIRED)
 add_executable(download_manager
     src/main.cpp
     src/HTTPClient.cpp
+    src/DownloadTask.cpp
 )
 
 target_link_libraries(download_manager CURL::libcurl)

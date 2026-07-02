@@ -20,6 +20,12 @@ public:
     bool downloadFile(
         const std::string& url,
         const std::string& outputFile);
+    
+    bool downloadRange(
+        const std::string& url,
+        const std::string& outputFile,
+        curl_off_t startByte,
+        curl_off_t endByte);
 private:
     long statusCode = 0;
     curl_off_t contentLength = 0;

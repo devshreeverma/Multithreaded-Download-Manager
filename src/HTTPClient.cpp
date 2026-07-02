@@ -200,3 +200,53 @@ bool HTTPClient::downloadFile(
 
     return result == CURLE_OK;
 }
+bool HTTPClient::downloadRange(
+    const std::string& url,
+    const std::string& outputFile,
+    curl_off_t startByte,
+    curl_off_t endByte)
+{
+    CURL* curl = curl_easy_init();
+
+    if (!curl)
+    {
+        std::cerr << "Failed to initialize CURL\n";
+        return false;
+    }
+
+    outputStream.open(outputFile, std::ios::binary);
+
+    if (!outputStream)
+    {
+        std::cerr << "Failed to open output file\n";
+        curl_easy_cleanup(curl);
+        return false;
+    }
+
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, this);
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+
+    std::string range =
+        std::to_string(startByte) +
+        "-" +
+        std::to_string(endByte);
+
+    curl_easy_setopt(
+        curl,
+        CURLOPT_RANGE,
+        range.c_str());
+
+    CURLcode result = curl_easy_perform(curl);
+
+    curl_easy_getinfo(
+        curl,
+        CURLINFO_RESPONSE_CODE,
+        &statusCode);
+
+    outputStream.close();
+    curl_easy_cleanup(curl);
+
+    return result == CURLE_OK;
+}

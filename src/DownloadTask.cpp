@@ -14,5 +14,9 @@ DownloadTask::DownloadTask(
 
 bool DownloadTask::execute()
 {
-    return true;
+    return client.downloadRange(
+        url,
+        outputFile,
+        startByte,
+        endByte);
 }
